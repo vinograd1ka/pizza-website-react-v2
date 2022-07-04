@@ -1,0 +1,36 @@
+.container {
+  text-align: center;
+  li {
+    display: inline-block;
+
+  }
+
+  a {
+    color: green;
+    cursor: pointer;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 38px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid green;
+    border-radius: 30px;
+    margin: 6px;
+
+    &:hover {
+      background-color: lightgreen;
+      color: white;
+    }
+  }
+
+  :global {
+    .selected {
+      a {
+        background-color: lightgreen;
+        color: white;
+      }
+    }
+  }
+}
