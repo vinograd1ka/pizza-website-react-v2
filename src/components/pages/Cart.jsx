@@ -8,7 +8,7 @@ import CartEmpty from "../CartEmpty";
 const Cart = () => {
     const dispatch = useDispatch()
 
-    const {items, totalPrice} = useSelector(state => state.cartSlice)
+    const {items, totalPrice, totalCount} = useSelector(state => state.cartSlice)
 
     const handleClickClearItems = () => {
         if (items.length === 0 || window.confirm('Очистить корзину?')) {
@@ -57,7 +57,7 @@ const Cart = () => {
                 </div>
                 <div className="cart__bottom">
                     <div className="cart__bottom-details">
-                        <span> Всего пицц: <b>{items.length} шт.</b> </span>
+                        <span> Всего пицц: <b>{totalCount} шт.</b> </span>
                         <span> Сумма заказа: <b>{totalPrice} ₽</b> </span>
                     </div>
                     <div className="cart__bottom-buttons">
