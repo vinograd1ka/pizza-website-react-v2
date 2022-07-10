@@ -5,14 +5,18 @@ import { addItem } from "../../redux/slices/cartSlice";
 const PizzaBlock = ({ id, title, price, imageUrl, types, sizes }) => {
     const dispatch = useDispatch();
 
-    const cartItem = useSelector(state => state.cartSlice.items.find(obj => obj.title === title))
-    const addedCount = cartItem ? cartItem.count : 0;
-
     const availableTypes = ['тонкое', 'традиционное']
     const availableSizes = [26, 30, 40]
 
     const [activeType, setActiveType] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
+
+    const priceOfSize = [ 0, 50, 100 ][activeSize] ?? null;
+    const idOfSize = [ 0, 1, 2 ][activeSize] ?? null;
+    const idOfType = [ 0, 3 ][activeType] ?? null;
+
+    id = id + idOfSize + idOfType;
+    price = price + priceOfSize;
 
     const handleClickAdd = () => {
         const item = {
@@ -26,12 +30,8 @@ const PizzaBlock = ({ id, title, price, imageUrl, types, sizes }) => {
         dispatch(addItem(item))
     }
 
-    const priceOfSize = [ 0, 50, 100 ][activeSize] ?? null;
-    const idOfSize = [ 0, 1, 2 ][activeSize] ?? null;
-    const idOfType = [ 0, 3 ][activeType] ?? null;
-
-    id = id + idOfSize + idOfType;
-    price = price + priceOfSize;
+    const cartItem = useSelector(state => state.cartSlice.items.find(obj => obj.id === id))
+    const addedCount = cartItem ? cartItem.count : 0;
 
     return (
         <div className="pizza-block">

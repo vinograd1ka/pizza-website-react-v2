@@ -19,6 +19,7 @@ export const pizzaSlice = createSlice({
     initialState,
     reducers: {
         setItems (state, action) {
+            console.log(action.payload)
             state.items = action.payload;
         },
     },
