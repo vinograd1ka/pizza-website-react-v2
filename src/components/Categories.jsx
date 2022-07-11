@@ -18,3 +18,4 @@ const Categories = ({categories, onChangeActiveCategory, activeCategory}) => {
 };
 
 export default Categories;
+

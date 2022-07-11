@@ -1,5 +1,4 @@
 @import './../variables';
-
 .categories {
   ul {
     display: flex;
@@ -25,6 +24,17 @@
       &.active {
         background-color: #282828;
         color: #fff;
+      }
+    }
+  }
+
+  @media(max-width:1060px){
+    ul {
+      display: block;
+      text-align: center;
+
+      li {
+        margin: 5px 0;
       }
     }
   }

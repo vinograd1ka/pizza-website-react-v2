@@ -29,7 +29,7 @@ const CartItem = ({ id, title, type, size, price, count, imageUrl }) => {
             </div>
             <div className="cart__item-info">
                 <h3>{ title }</h3>
-                <p>{type} тесто, {size} см.</p>
+                <p>{type} dough, {size} cm.</p>
             </div>
             <div className="cart__item-count">
 
@@ -61,7 +61,7 @@ const CartItem = ({ id, title, type, size, price, count, imageUrl }) => {
                 </div>
             </div>
             <div className="cart__item-price">
-                <b>{ price * count } ₽</b>
+                <b>{ price * count } $</b>
             </div>
             <div className="cart__item-remove">
                 <div onClick={handleClickDelete} className="button button--outline button--circle">

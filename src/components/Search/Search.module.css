@@ -1,13 +1,16 @@
-.container {
+.containerComputer {
     position: relative;
 }
 
-.input {
+.containerComputer input {
     border: 1px solid seagreen;
     padding: 12px 44px 12px 20px;
     width: 300px;
     border-radius: 10px;
     font-size: 16px;
+}
+.containerTelephone {
+    display: none;
 }
 
 .icon {
@@ -17,4 +20,25 @@
     position: absolute;
     top: 12px;
     right: 16px;
+}
+
+@media (max-width: 1060px) {
+    .containerComputer {
+        display: none;
+    }
+    .containerTelephone {
+        display: block;
+        position: relative;
+    }
+    .containerTelephone input {
+        width: 100%;
+        border: 1px solid seagreen;
+        padding: 12px 44px 12px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    .containerTelephone .icon {
+        right: 34px;
+    }
 }
