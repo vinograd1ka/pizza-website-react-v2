@@ -39,7 +39,7 @@ const Sort = ({ sortList, activeSort, onChangeActiveSort }) => {
                         fill="#2C2C2C"
                     />
                 </svg>
-                <b>Сортировка по:</b>
+                <b>sorting by:</b>
                 <span onClick={() => setOpen(!open)}>{activeSort.name}</span>
             </div>
             {open &&

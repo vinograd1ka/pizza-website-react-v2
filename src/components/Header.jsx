@@ -15,15 +15,14 @@ const Header = ({ searchValue, setSearchValue }) => {
                         <img width="38" src={logoSvg} alt="Pizza logo"/>
                         <div>
                             <h1>React Pizza</h1>
-                            <p>самая вкусная пицца во вселенной</p>
+                            <p>the most delicious pizza in the universe</p>
                         </div>
                     </div>
                 </NavLink>
-                <Search searchValue={searchValue} setSearchValue={setSearchValue}/>
+                <Search searchValue={searchValue} setSearchValue={setSearchValue} version={'computer'}/>
                 <div className="header__cart">
-
                     <NavLink to="/cart" className="button button--cart">
-                        <span>{totalPrice} ₽</span>
+                        <span>{totalPrice} $</span>
                         <div className="button__delimiter"/>
                         <svg
                             width="18"
@@ -58,6 +57,7 @@ const Header = ({ searchValue, setSearchValue }) => {
                     </NavLink>
                 </div>
             </div>
+            <Search searchValue={searchValue} setSearchValue={setSearchValue} version={'telephone'}/>
         </div>
     );
 };

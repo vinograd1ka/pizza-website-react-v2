@@ -2,8 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     items: [],
+    countItems: [],
     totalPrice: 0,
-    totalCount: 0
+    totalCount: 0,
 }
 
 export const cartSlice = createSlice({
@@ -11,14 +12,26 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         addItem (state, action) {
-            const findItem = state.items.find(obj => obj.id === action.payload.id)
+            const findItem = state.items.find(obj => obj.title === action.payload.title)
+            const findSameItem = state.items.find(obj => obj.title === action.payload.title && obj.size === action.payload.size && obj.type === action.payload.type)
 
-            if (findItem) findItem.count++;
+            if (!findSameItem) {
+                const newCount = findItem ? findItem.count : 0
+                state.items = state.items.filter(obj => action.payload.title !== obj.title)
+
+                findItem && state.items.push({...action.payload, count: newCount + 1})
+            }
+
+            if (findItem) {
+                console.log(2)
+                findItem.count++;
+            }
 
             else {
+                console.log(3)
                 state.items.push({
                     ...action.payload,
-                    count: 1
+                    count: action.payload.count || 1
                 })
             }
 
