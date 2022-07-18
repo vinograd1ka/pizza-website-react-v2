@@ -11,6 +11,7 @@ export const fetchPizzas = createAsyncThunk(
 
 const initialState = {
     items: [],
+    selectedItemSize: [],
     status: 'loading' //loading | success | error
 }
 
@@ -19,8 +20,16 @@ export const pizzaSlice = createSlice({
     initialState,
     reducers: {
         setItems (state, action) {
-            state.items = action.payload;
+            state.items = action.payload.map(apiItem => state.selectedItemSize.find(item => item.id === apiItem.id) ?? apiItem)
         },
+
+        changeSizeItem (state, action) {
+            state.selectedItemSize = state.selectedItemSize.filter(obj => action.payload.id !== obj.id)
+            state.selectedItemSize.push(action.payload)
+
+            const findItem = state.items.find(obj => obj.id === action.payload.id)
+            findItem.selectedSize = action.payload.selectedSize;
+        }
     },
     extraReducers: {
             [fetchPizzas.pending]: (state) => {
@@ -42,6 +51,6 @@ export const pizzaSlice = createSlice({
 
 })
 
-export const { setItems } = pizzaSlice.actions;
+export const { setItems, changeSizeItem } = pizzaSlice.actions;
 
 export default pizzaSlice.reducer;

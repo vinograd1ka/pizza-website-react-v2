@@ -1,22 +1,52 @@
 import React from 'react';
 import {useDispatch} from "react-redux";
-import {minusItem, plusItem, removeItem} from "../redux/slices/cartSlice";
+import {changeItemSize, changeItemType, minusItem, plusItem, removeItem} from "../redux/slices/cartSlice";
+import {useEffect, useRef, useState} from "react";
 
-const CartItem = ({ id, title, type, size, price, count, imageUrl }) => {
+const CartItem = ({ id, title, selectedType, selectedSize, count, imageUrl, types, sizes, priceOfSize, price }) => {
     const dispatch = useDispatch()
 
-    const handleClickPlus = () => {
-        dispatch(plusItem({id}))
-    }
-
+    const handleClickPlus = () => dispatch(plusItem({id, price: priceOfSize[selectedSize]}))
     const handleClickMinus = () => {
         if (count === 1) dispatch(removeItem({id}))
         dispatch(minusItem({id}))
     }
+    const handleClickDelete = () => dispatch(removeItem({id}))
 
-    const handleClickDelete = () => {
-        dispatch(removeItem({id}))
+    const [openSize, setOpenSize] = useState(false)
+    const [openType, setOpenType] = useState(false)
+
+    const sizeRef = useRef()
+    const typeRef = useRef()
+
+    const availableSizes = [26, 30, 40]
+    const availableTypes = ['thin', 'traditional']
+
+    const handleClickSelectedSize = (index) => {
+        setOpenSize(!openSize)
+
+        if (index === selectedSize) return
+        dispatch(changeItemSize({id, title, price: priceOfSize[index], imageUrl, selectedSize: index, types, sizes, count}))
     }
+    const handleClickSelectedType = (index) => {
+        setOpenType(!openType)
+        dispatch(changeItemType({id, selectedSize: index}))
+    }
+
+    useEffect(() => {
+        const handleClickOutsideSize = (event) => { if (!event.path.includes(sizeRef.current)) setOpenSize(false) }
+        const handleClickOutsideType = (event) => { if (!event.path.includes(typeRef.current)) setOpenType(false) }
+
+
+        document.body.addEventListener('click', handleClickOutsideSize)
+        document.body.addEventListener('click', handleClickOutsideType)
+
+        // если компонент захочет размонтироваться (умереть при переходе на другую страничку(корзина))
+        return () => {
+            document.body.removeEventListener('click', handleClickOutsideSize)
+            document.body.removeEventListener('click', handleClickOutsideType)
+        }
+    }, [])
 
     return (
         <div className="cart__item">
@@ -29,7 +59,34 @@ const CartItem = ({ id, title, type, size, price, count, imageUrl }) => {
             </div>
             <div className="cart__item-info">
                 <h3>{ title }</h3>
-                <p>{type} dough, {size} cm.</p>
+
+                <p> {types.length !== 1
+                    ? <button className="button button--outline button--add" ref={typeRef} onClick={() => setOpenType(!openType)}> {availableTypes[selectedType]} dough, </button>
+                    : <>{availableTypes[selectedType]} dough,</>
+                }
+
+                    <button className="button button--outline button--add" style={{marginLeft: 5}} ref={sizeRef} onClick={() => setOpenSize(!openSize)}> {availableSizes[selectedSize]} cm. </button>
+                </p>
+
+                {openType &&
+                    <div className="pizza-block__selector__popup">
+                        <ul>
+                            {types.map((size, index) =>
+                                <li key={index} onClick={() => handleClickSelectedType(index)}>{availableTypes[index]} cm.</li>
+                            )}
+                        </ul>
+                    </div>
+                }
+
+                {openSize &&
+                    <div className="cart__item-size__popup pizza-block__selector__popup">
+                        <ul>
+                            {sizes.map((size, index) =>
+                                <li key={index} onClick={() => handleClickSelectedSize(index)}>{availableSizes[index]} cm.</li>
+                            )}
+                        </ul>
+                    </div>
+                }
             </div>
             <div className="cart__item-count">
 
@@ -61,7 +118,7 @@ const CartItem = ({ id, title, type, size, price, count, imageUrl }) => {
                 </div>
             </div>
             <div className="cart__item-price">
-                <b>{ price * count } $</b>
+                <b>{ priceOfSize[selectedSize] * count } $</b>
             </div>
             <div className="cart__item-remove">
                 <div onClick={handleClickDelete} className="button button--outline button--circle">

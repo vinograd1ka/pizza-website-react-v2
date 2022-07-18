@@ -15,7 +15,6 @@ const Cart = () => {
             dispatch(clearItems())
         }
     }
-
     if (!totalPrice) return <CartEmpty />
     return (
         <div className="container container--cart">
@@ -53,7 +52,6 @@ const Cart = () => {
                 </div>
                 <div className="content__items">
                     {items.map(obj => <CartItem key={obj.id} {...obj} />)}
-
                 </div>
                 <div className="cart__bottom">
                     <div className="cart__bottom-details">

@@ -33,7 +33,7 @@ const Home = ({ searchValue }) => {
     const sortType = useSelector(state => state.filterSlice.sortType)
     const handleClickSort = (obj) => dispatch(setSortType(obj))
 
-    const { items, status } = useSelector(state => state.pizzaSlice)
+    const { items, selectedItemSize, status } = useSelector(state => state.pizzaSlice)
 
     const [currentPage, setCurrentPage] = useState(1)
 
@@ -71,9 +71,7 @@ const Home = ({ searchValue }) => {
             isSearch.current = true;
         }
 
-        getPizzas()
     }, [])
-
 
     // если был первый рендер, то запрашиваем пиццы
     useEffect(() => {
@@ -114,7 +112,7 @@ const Home = ({ searchValue }) => {
                                 return false
                             }).map( (obj, index) => (<PizzaBlock key={index} {...obj} />) )
 
-                            : Array(3).fill(0).map((_, index) => (<PizzaBlockLoader key={index}/>))
+                            : Array(6).fill(0).map((_, index) => (<PizzaBlockLoader key={index}/>))
                         }
                     </div>
                 )}

@@ -1,55 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../../redux/slices/cartSlice";
+import {addItem, changeItemSize} from "../../redux/slices/cartSlice";
+import {changeSizeItem} from "../../redux/slices/pizzaSlice";
 
-const PizzaBlock = ({ id, title, price, imageUrl, types, sizes }) => {
-    const dispatch = useDispatch();
+const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSize }) => {
+    const dispatch = useDispatch()
 
     const availableTypes = ['thin', 'traditional']
     const availableSizes = [26, 30, 40]
 
     const [activeType, setActiveType] = useState(0)
-    const [activeSize, setActiveSize] = useState(0)
-
 
     const handleClickAdd = () => {
-        const item = {
-            id,
-            title,
-            price,
-            imageUrl,
-            type: availableTypes[activeType],
-            size: availableSizes[activeSize],
-        }
+        const item = {id, title, price: priceOfSize[selectedSize], priceOfSize, imageUrl, selectedType: activeType, selectedSize, types, sizes,}
         dispatch(addItem(item))
+    }
+
+    const handleClickSize = (index) => {
+        dispatch(changeSizeItem({id, title, price: priceOfSize[selectedSize], priceOfSize, imageUrl, selectedType: activeType, selectedSize: index, types, sizes}))
     }
 
     const cartItem = useSelector(state => state.cartSlice.items.find(obj => obj.title === title))
     const addedCount = cartItem ? cartItem.count : 0;
-
-    const [openSize, setOpenSize] = useState(false)
-    const sortRef = useRef()
-
-    const handleClickSelected = (index) => {
-        setOpenSize(!openSize)
-        setActiveSize(index)
-    }
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (!event.path.includes(sortRef.current)) {
-                setOpenSize(false)
-            }
-        }
-
-        document.body.addEventListener('click', handleClickOutside)
-
-        // если компонент захочет размонтироваться (умереть при переходе на другую страничку(корзина))
-        return () => document.body.removeEventListener('click', handleClickOutside)
-    }, [])
-
-    const priceOfSize = [ 0, 50, 100 ][activeSize] ?? null;
-    price = price + priceOfSize;
 
     return (
         <div className="pizza-block">
@@ -60,30 +32,25 @@ const PizzaBlock = ({ id, title, price, imageUrl, types, sizes }) => {
             />
             <h4 className="pizza-block__title">{ title }</h4>
             <div className="pizza-block__selector">
-                <ul>
+                <ul style={{marginBottom: 16}}>
                     {types.map((type, index) =>
                         <li key={index}
                             className={activeType === index ? 'active' : ''}
-                            onClick={() => setActiveType(index)}>{availableTypes[index]}</li> )}
+                            onClick={() => setActiveType(index)}>{availableTypes[index]}</li>)
+                    }
                 </ul>
 
-                <ul ref={sortRef}>
-                    <li style={{backgroundColor:"white"}} onClick={() => setOpenSize(!openSize)}>{availableSizes[activeSize]} cm.</li>
-
-                    {openSize &&
-                        <div className="pizza-block__selector__popup">
-                            <ul>
-                                {sizes.map((size, index) =>
-                                    <li key={index} onClick={() => handleClickSelected(index)}>{sizes[index]} cm.</li>
-                                )}
-                            </ul>
-                        </div>
+                <ul style={{marginBottom: 16}}>
+                    {sizes.map((size, index) =>
+                        <li key={index}
+                            className={selectedSize === index ? 'active' : ''}
+                            onClick={() => handleClickSize(index)}>{availableSizes[index]} cm.</li>)
                     }
 
                 </ul>
             </div>
             <div className="pizza-block__bottom">
-                <div className="pizza-block__price">from {price} $</div>
+                <div className="pizza-block__price">from {priceOfSize[selectedSize] ?? null} $</div>
                 <div className="button button--outline button--add" onClick={handleClickAdd}>
                     <svg
                         width="12"
@@ -107,8 +74,3 @@ const PizzaBlock = ({ id, title, price, imageUrl, types, sizes }) => {
 };
 
 export default PizzaBlock;
-
-{/*{sizes.map((size, index) => */}
-{/*    <li key={index} */}
-{/*        className={activeSize === index ? 'active' : ''}*/}
-{/*        onClick={() => setActiveSize(index)}>{availableSizes[index]} см.</li>)}*/}

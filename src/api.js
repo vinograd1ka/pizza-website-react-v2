@@ -7,11 +7,7 @@ const instance = axios.create({
 export const pizzasAPI = {
     items: {
         get (currentPage, categoryId, sortType) {
-            return instance.get(`items?page=
-            ${currentPage}&limit=3&
-            ${categoryId > 0 ? `category=${categoryId}` : ''}&sortBy=
-            ${sortType.sortProperty}&order=
-            ${sortType.order}`)
+            return instance.get(`items?page=${currentPage}&limit=6&${categoryId > 0 ? `category=${categoryId}` : ''}&sortBy=${sortType.sortProperty}&order=${sortType.order}`)
         }
     },
 }
