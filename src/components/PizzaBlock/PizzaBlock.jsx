@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {addItem, changeItemSize} from "../../redux/slices/cartSlice";
 import {changeSizeItem} from "../../redux/slices/pizzaSlice";
 
-const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSize }) => {
+const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSize, count }) => {
     const dispatch = useDispatch()
 
     const availableTypes = ['thin', 'traditional']
@@ -12,7 +12,17 @@ const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSi
     const [activeType, setActiveType] = useState(0)
 
     const handleClickAdd = () => {
-        const item = {id, title, price: priceOfSize[selectedSize], priceOfSize, imageUrl, selectedType: activeType, selectedSize, types, sizes,}
+        const item = {
+            id,
+            title,
+            price: priceOfSize[selectedSize],
+            priceOfSize,
+            imageUrl,
+            selectedType: activeType,
+            selectedSize,
+            types,
+            sizes
+        }
         dispatch(addItem(item))
     }
 

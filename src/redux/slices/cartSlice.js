@@ -12,9 +12,7 @@ export const cartSlice = createSlice({
     reducers: {
         addItem (state, action) {
             action.payload.id = action.payload.id + [0, 1, 2][action.payload.selectedSize] + [0, 3][action.payload.selectedType] ?? null;
-
             const findItem = state.items.find(obj => obj.title === action.payload.title && obj.selectedSize === action.payload.selectedSize)
-
             if (findItem) findItem.count++;
 
             else {
@@ -44,7 +42,6 @@ export const cartSlice = createSlice({
             const findItem = state.items.find(obj => obj.id === action.payload.id)
             if (findItem) findItem.count++
 
-            state.items.reduce((acc, obj) => console.log(obj.price, obj.count), 0)
             state.totalCount = state.items.reduce((acc, item) => acc + item.count, 0)
             state.totalPrice = state.items.reduce((acc, obj) => (obj.price * obj.count) + acc ,0)
         },
@@ -69,6 +66,7 @@ export const cartSlice = createSlice({
 
             else {
                 const findItem = state.items.find(obj => obj.id === action.payload.id)
+                findItem.id = action.payload.id + [0, 1, 2][action.payload.selectedSize] ?? null;
 
                 findItem.price = action.payload.price;
                 findItem.selectedSize = action.payload.selectedSize;

@@ -24,9 +24,6 @@ export const pizzaSlice = createSlice({
         },
 
         changeSizeItem (state, action) {
-            state.selectedItemSize = state.selectedItemSize.filter(obj => action.payload.id !== obj.id)
-            state.selectedItemSize.push(action.payload)
-
             const findItem = state.items.find(obj => obj.id === action.payload.id)
             findItem.selectedSize = action.payload.selectedSize;
         }
