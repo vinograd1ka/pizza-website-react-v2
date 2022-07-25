@@ -3,13 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {addItem, changeItemSize} from "../../redux/slices/cartSlice";
 import {changeSizeItem} from "../../redux/slices/pizzaSlice";
 
-const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSize, count }) => {
+const PizzaBlock = ({ id, title, imageUrl, types, sizes, priceOfSize, cartItems }) => {
     const dispatch = useDispatch()
 
     const availableTypes = ['thin', 'traditional']
     const availableSizes = [26, 30, 40]
 
     const [activeType, setActiveType] = useState(0)
+    const [selectedSize, setSelectedSize] = useState(0)
+
+    id = id + [0, 1, 2][selectedSize] + [0, 3][activeType] ?? null;
 
     const handleClickAdd = () => {
         const item = {
@@ -26,11 +29,7 @@ const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSi
         dispatch(addItem(item))
     }
 
-    const handleClickSize = (index) => {
-        dispatch(changeSizeItem({id, title, price: priceOfSize[selectedSize], priceOfSize, imageUrl, selectedType: activeType, selectedSize: index, types, sizes}))
-    }
-
-    const cartItem = useSelector(state => state.cartSlice.items.find(obj => obj.title === title))
+    const cartItem = cartItems.find(obj => obj.id === id)
     const addedCount = cartItem ? cartItem.count : 0;
 
     return (
@@ -54,7 +53,7 @@ const PizzaBlock = ({ id, title, imageUrl, types, sizes, selectedSize, priceOfSi
                     {sizes.map((size, index) =>
                         <li key={index}
                             className={selectedSize === index ? 'active' : ''}
-                            onClick={() => handleClickSize(index)}>{availableSizes[index]} cm.</li>)
+                            onClick={() => setSelectedSize(index)}>{availableSizes[index]} cm.</li>)
                     }
 
                 </ul>

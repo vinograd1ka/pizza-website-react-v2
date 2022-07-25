@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {changeItemSize, changeItemType, minusItem, plusItem, removeItem} from "../redux/slices/cartSlice";
 import {useEffect, useRef, useState} from "react";
 
-const CartItem = ({ id, title, selectedType, selectedSize, count, imageUrl, types, sizes, priceOfSize, price }) => {
+const CartItem = ({ id, title, selectedType, selectedSize, count, imageUrl, types, sizes, priceOfSize }) => {
     const dispatch = useDispatch()
 
     const handleClickPlus = () => dispatch(plusItem({id, price: priceOfSize[selectedSize]}))

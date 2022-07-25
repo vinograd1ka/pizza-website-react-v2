@@ -33,7 +33,8 @@ const Home = ({ searchValue }) => {
     const sortType = useSelector(state => state.filterSlice.sortType)
     const handleClickSort = (obj) => dispatch(setSortType(obj))
 
-    const { items, selectedItemSize, status } = useSelector(state => state.pizzaSlice)
+    const { items, status } = useSelector(state => state.pizzaSlice)
+    const cartItems  = useSelector(state => state.cartSlice.items)
 
     const [currentPage, setCurrentPage] = useState(1)
 
@@ -110,7 +111,7 @@ const Home = ({ searchValue }) => {
                             ? items.filter(obj => {
                                 if(obj.title.toLowerCase().includes(searchValue.toLowerCase())) return true
                                 return false
-                            }).map( (obj, index) => (<PizzaBlock key={index} {...obj} />) )
+                            }).map( (obj, index) => (<PizzaBlock key={index} {...obj} cartItems={cartItems} />) )
 
                             : Array(6).fill(0).map((_, index) => (<PizzaBlockLoader key={index}/>))
                         }

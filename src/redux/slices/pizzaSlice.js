@@ -21,11 +21,6 @@ export const pizzaSlice = createSlice({
     reducers: {
         setItems (state, action) {
             state.items = action.payload.map(apiItem => state.selectedItemSize.find(item => item.id === apiItem.id) ?? apiItem)
-        },
-
-        changeSizeItem (state, action) {
-            const findItem = state.items.find(obj => obj.id === action.payload.id)
-            findItem.selectedSize = action.payload.selectedSize;
         }
     },
     extraReducers: {
