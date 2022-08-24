@@ -6,12 +6,12 @@ import {useEffect, useRef, useState} from "react";
 const CartItem = ({ id, title, selectedType, selectedSize, count, imageUrl, types, sizes, priceOfSize }) => {
     const dispatch = useDispatch()
 
-    const handleClickPlus = () => dispatch(plusItem({id, price: priceOfSize[selectedSize]}))
+    const handleClickPlus = () => dispatch(plusItem({id, selectedSize, title, price: priceOfSize[selectedSize]}))
     const handleClickMinus = () => {
-        if (count === 1) dispatch(removeItem({id}))
-        dispatch(minusItem({id}))
+        if (count === 1) dispatch(removeItem({id, selectedSize, title}))
+        dispatch(minusItem({id, selectedSize, title}))
     }
-    const handleClickDelete = () => dispatch(removeItem({id}))
+    const handleClickDelete = () => dispatch(removeItem({id, selectedSize, title}))
 
     const [openSize, setOpenSize] = useState(false)
     const [openType, setOpenType] = useState(false)
@@ -26,7 +26,7 @@ const CartItem = ({ id, title, selectedType, selectedSize, count, imageUrl, type
         setOpenSize(!openSize)
 
         if (index === selectedSize) return
-        dispatch(changeItemSize({id, title, price: priceOfSize[index], imageUrl, selectedSize: index, types, sizes, count}))
+        dispatch(changeItemSize({id, title, price: priceOfSize[index], imageUrl, previousSelectedSize: selectedSize, selectedSize: index, types, sizes, count}))
     }
     const handleClickSelectedType = (index) => {
         setOpenType(!openType)
@@ -36,7 +36,6 @@ const CartItem = ({ id, title, selectedType, selectedSize, count, imageUrl, type
     useEffect(() => {
         const handleClickOutsideSize = (event) => { if (!event.path.includes(sizeRef.current)) setOpenSize(false) }
         const handleClickOutsideType = (event) => { if (!event.path.includes(typeRef.current)) setOpenType(false) }
-
 
         document.body.addEventListener('click', handleClickOutsideSize)
         document.body.addEventListener('click', handleClickOutsideType)

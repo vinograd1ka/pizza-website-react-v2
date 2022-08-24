@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {addItem, changeItemSize} from "../../redux/slices/cartSlice";
-import {changeSizeItem} from "../../redux/slices/pizzaSlice";
 
-const PizzaBlock = ({ id, title, imageUrl, types, sizes, priceOfSize, cartItems }) => {
+const PizzaBlock = ({title, imageUrl, types, sizes, priceOfSize, cartItems }) => {
     const dispatch = useDispatch()
 
     const availableTypes = ['thin', 'traditional']
@@ -12,11 +11,8 @@ const PizzaBlock = ({ id, title, imageUrl, types, sizes, priceOfSize, cartItems 
     const [activeType, setActiveType] = useState(0)
     const [selectedSize, setSelectedSize] = useState(0)
 
-    id = id + [0, 1, 2][selectedSize] + [0, 3][activeType] ?? null;
-
     const handleClickAdd = () => {
         const item = {
-            id,
             title,
             price: priceOfSize[selectedSize],
             priceOfSize,
@@ -29,7 +25,7 @@ const PizzaBlock = ({ id, title, imageUrl, types, sizes, priceOfSize, cartItems 
         dispatch(addItem(item))
     }
 
-    const cartItem = cartItems.find(obj => obj.id === id)
+    const cartItem = cartItems.find(obj => obj.title === title && obj.selectedSize === selectedSize)
     const addedCount = cartItem ? cartItem.count : 0;
 
     return (

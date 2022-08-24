@@ -27,7 +27,7 @@ export const cartSlice = createSlice({
         },
 
         removeItem (state, action) {
-            state.items = state.items.filter(obj => obj.id !== action.payload.id)
+            state.items = state.items.filter(obj => obj.title !== action.payload.title && obj.selectedSize && action.payload.selectedSize)
             state.totalCount = state.items.reduce((acc, item) => acc + item.count, 0)
             state.totalPrice = state.items.reduce((acc, obj) => (obj.price * obj.count) + acc ,0)
         },
@@ -39,7 +39,7 @@ export const cartSlice = createSlice({
         },
 
         plusItem (state, action) {
-            const findItem = state.items.find(obj => obj.id === action.payload.id)
+            const findItem = state.items.find(obj => obj.title === action.payload.title && obj.selectedSize === action.payload.selectedSize)
             if (findItem) findItem.count++
 
             state.totalCount = state.items.reduce((acc, item) => acc + item.count, 0)
@@ -47,7 +47,7 @@ export const cartSlice = createSlice({
         },
 
         minusItem (state, action) {
-            const findItem = state.items.find(obj => obj.id === action.payload.id)
+            const findItem = state.items.find(obj => obj.title === action.payload.title && obj.selectedSize === action.payload.selectedSize)
             if (findItem) findItem.count--;
 
             state.totalCount = state.items.reduce((acc, item) => acc + item.count, 0)
@@ -60,23 +60,21 @@ export const cartSlice = createSlice({
             if (findSameItem) {
                 findSameItem.count += action.payload.count;
 
-                state.items = state.items.filter(obj => action.payload.id !== obj.id)
+                state.items = state.items.filter(obj => action.payload.title !== obj.title || action.payload.previousSelectedSize !== obj.selectedSize)
                 state.totalPrice = state.items.reduce((acc, obj) => action.payload.price * obj.count + acc ,0)
             }
 
             else {
-                const findItem = state.items.find(obj => obj.id === action.payload.id)
-                findItem.id = action.payload.id + [0, 1, 2][action.payload.selectedSize] ?? null;
+                const findItem = state.items.find(obj => obj.title === action.payload.title && obj.selectedSize === action.payload.previousSelectedSize)
 
                 findItem.price = action.payload.price;
                 findItem.selectedSize = action.payload.selectedSize;
                 state.totalPrice = state.items.reduce((acc, obj) => obj.price * obj.count + acc ,0)
             }
-
         },
 
         changeItemType (state, action) {
-            const findItem = state.items.find(obj => obj.id === action.payload.id)
+            const findItem = state.items.find(obj => obj.title === action.payload.title && obj.selectedSize === action.payload.selectedSize)
             state.items.push({
                 ...action.payload,
             })

@@ -20,7 +20,9 @@ export const pizzaSlice = createSlice({
     initialState,
     reducers: {
         setItems (state, action) {
-            state.items = action.payload.map(apiItem => state.selectedItemSize.find(item => item.id === apiItem.id) ?? apiItem)
+            state.items = action.payload.map(apiItem => state.selectedItemSize.find(
+                item => item.title === apiItem.title && item.selectedSize === apiItem.selectedSize) ?? apiItem
+            )
         }
     },
     extraReducers: {

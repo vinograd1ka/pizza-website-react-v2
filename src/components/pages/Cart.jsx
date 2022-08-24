@@ -16,6 +16,7 @@ const Cart = () => {
         }
     }
     if (!totalPrice) return <CartEmpty />
+
     return (
         <div className="container container--cart">
             <div className="cart">
@@ -51,7 +52,7 @@ const Cart = () => {
                     </div>
                 </div>
                 <div className="content__items">
-                    {items.map(obj => <CartItem key={obj.id} {...obj} />)}
+                    {items.map(obj => <CartItem key={`${obj.title} ${obj.selectedSize}`} {...obj} />)}
                 </div>
                 <div className="cart__bottom">
                     <div className="cart__bottom-details">
